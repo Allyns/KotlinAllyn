@@ -314,6 +314,11 @@ class Main2Activity : AppCompatActivity() {
         methodd("a", "b", "c", "d", arrayOf("a", "b", "c"), arrayOf("a", "b", "c"), arrayOf("a", "b", "c"))
         fanxing("a", arrayListOf("bb", "c", "", 7, 1.1, true), arrayListOf("c", "d", 2.4f))
         setarray(arrayOf(12))
+        val arralist = mutableListOf<Int>(4, 5, 6)
+        arralist.sup(1, 2)
+
+//        var string_array: Array<String> = arrayOf("How", "do", "you", "do", "I'm   ", "Fine")
+//        maxCustom<String>(string_array, { a, b -> a.length > b.length }
     }
 
     //参数默认赋值
@@ -351,7 +356,7 @@ class Main2Activity : AppCompatActivity() {
     }
 
     //-------------------泛型的使用 ------------------------
-    //方法名前面声明泛型名称
+//方法名前面声明泛型名称
     fun <T> fanxing(stg: String, vararg infos: ArrayList<T>): ArrayList<String> {
         var arrs: List<T>? = listOf()
         var str: String = "$stg"
@@ -365,7 +370,7 @@ class Main2Activity : AppCompatActivity() {
         return arrayListOf(str)
     }
 //------------------------------内联函数-----------------------------------------------------------------
-    //泛型T具体化方式： inline fun <reified T : Number> 制定T只能是Number的子类
+//泛型T具体化方式： inline fun <reified T : Number> 制定T只能是Number的子类
     /**
      * 知识点
      * 举个例子，Int、Float和Double都继承自Number，但是定义一个setArrayNumber(array:Array<Number>)函数，
@@ -373,7 +378,7 @@ class Main2Activity : AppCompatActivity() {
      * ，即将<T>改为<reified T : Number>，同时在fun前面添加关键字inline，表示该函数也为内联函数。内联函数在编译之时，
      * 会在调用处把该函数的内部代码直接复制一份，调用十次就会复制十份，而非普通函数那样仅仅提供一个函数的访问地址
      */
-    //该函数不接受Array<Int>，也不接受Array<Double>，只好沦为孤家寡人
+//该函数不接受Array<Int>，也不接受Array<Double>，只好沦为孤家寡人
     fun arrayNubmer(array: Array<Number>) {
         var str: String = "abcde"
 //        var str: Double = 63.4
@@ -394,8 +399,143 @@ class Main2Activity : AppCompatActivity() {
     }
 
     //------------------------------扩展函数-------------------------------------
-    fun Array<Int>.swap(count1: Int, count2: Int) {
-        var stwp: Int
-        stwp = count1
+//用法：    val arralist = mutableListOf<Int>(4,5,6)
+//        arralist.sup(1,2)
+//个人理解：可以扩展任何类的方法，系统的自建的都可以，
+    fun Array<Int>.swap(count1: Int, count2: Int): Int {
+        val stwp = this[count1]
+        this[count1] = count2
+        this[count2] = stwp
+        return count1 + count2
+    }
+
+    //高级写法，使用泛型，Array中所有类型都支持
+    fun <T> MutableList<T>.sup(count1: Int, count2: Int): Int {
+        val swap = this[count1]
+        this[count1] = this[count2]
+        this[count2] = swap
+        return count1 + count2
+    }
+
+    //-----------尾递归函数---------------------------------------
+//如果一个函数的表达式比较简单，一两行就可以搞定的话，Kotlin允许使用等号代替大括号。
+    fun fangfa1(s: Int): Int {
+        return if (s == 0) s else s - 1
+    }
+
+    fun fangfa2(s: Int): Int = if (s == 0) 2 else 3
+    //tailrec 关键字 如果这个方法调用了自身的方法 加上关键字tailrec 系统会对这个方法进行优化
+    tailrec fun fangfa3(b: Int): Int = if (b == 5) 5 else fangfa3(45)
+
+    //---------------------------------高阶函数-----------------------------------
+//把A函数作为B函数的输入参数，就像普通变量一样参与B函数的表达式计算。此时因为B函数的入参内嵌了A函数，故而B函数被称作高阶函数，
+//允许将函数表达式作为输入参数传进来，就形成了高阶函数，这里的greater函数就像是个变量
+    fun <T> maxCustom(array: Array<T>, greater: (T, T) -> Boolean): T? {
+        var max: T? = null
+        for (item in array)
+            if (max == null || greater(item, max))
+                max = item
+        return max
+    }
+//调用
+//maxCustom<String>(string_array, { a, b -> a.length > b.length }}
+//var string_array: Array<String> = arrayOf("How", "do", "you", "do", "I'm   ", "Fine")
+    /**
+     * 以上代码在调用maxCustom函数时，第二个参数被大括号包了起来，这是Lambda表达式的匿名函数写法，中间的“->”把匿名函数分为两部分，
+     * 前半部分表示函数的输入参数，后半部分表示函数体。“{ a, b -> a.length > b.length }”按照规范的函数写法是下面这样的代码：
+     */
+    fun anonymous(a: String, b: String): Boolean {
+        var result: Boolean = a.length > b.length
+        return result
+    }
+
+    //我的应用哪个
+    fun fangfa4(d: Int, fangfa2: (a: Int, b: Int) -> Int): Int {
+        var max = 0
+        max = fangfa2(2, 3)
+        return max
+    }
+
+    fun dy() {
+        fangfa4(2) { a, b -> a + b - 1 }
+    }
+
+    //------------------------------------类与构造方法---------------------------
+    /**
+     * 继承
+     */
+    open class ClassA {
+    }
+    class ClassB : ClassA() {
+    }
+
+    /**
+     * 构造方法
+     */
+    fun diaoyong() {
+        val d1 = ClassD(1, 2)
+
+        val e = ClassE(1, 2)
+        val e1 = ClassE(1, 2, 3)
+
+        val f = ClassF(1, 2)
+        val f1 = ClassF(1, 2, 3)
+
+        val g = ClassG(1, 2)
+        val g1 = ClassG(1, 2, 3)
+    }
+
+    //默认构造方法 使用关键字constructor声明构造方法
+    class ClassD constructor(a: Int, b: Int) {
+        init {
+            print("创建时候的初始化方法")
+        }
+    }
+
+    ///二级构造方法 这种写法的二级构造函数需要写this声明从属关系
+    class ClassE constructor(a: Int, b: Int) {
+        init {
+            print("1")
+        }
+
+        constructor(a: Int, b: Int, c: Int) : this(a, b) {
+            print("2")
+        }
+    }
+
+    //优化 二级构造函数的写法
+    class ClassF {
+        var a:Int=0
+        constructor(a: Int, b: Int) {
+            this.a=a
+            print("1")
+        }
+
+        constructor(a: Int, b: Int, c: Int) {
+            print("2")
+        }
+        fun  fff(){
+            var c:Int=0
+            c=a
+            print(c)
+        }
+    }
+
+    //推荐这种写法，充分利用kotlin的优势简化代码
+    //持续优化 二级构造的写法 使用可变参数
+    class ClassG constructor(a: Int, b: Int, c: Int = 0) {
+        init {
+            print("1")
+            var count1:Int
+            count1=a+b+c
+            gff(a,b,c)
+        }
+        fun  gff(a: Int, b: Int, c: Int = 0){
+//            var count1:Int
+//            count1=a+b+c
+        }
     }
 }
+
+
+
