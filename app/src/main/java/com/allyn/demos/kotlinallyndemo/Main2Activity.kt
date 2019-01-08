@@ -466,6 +466,7 @@ class Main2Activity : AppCompatActivity() {
      */
     open class ClassA {
     }
+
     class ClassB : ClassA() {
     }
 
@@ -505,18 +506,20 @@ class Main2Activity : AppCompatActivity() {
 
     //优化 二级构造函数的写法
     class ClassF {
-        var a:Int=0
+        var a: Int = 0
+
         constructor(a: Int, b: Int) {
-            this.a=a
+            this.a = a
             print("1")
         }
 
         constructor(a: Int, b: Int, c: Int) {
             print("2")
         }
-        fun  fff(){
-            var c:Int=0
-            c=a
+
+        fun fff() {
+            var c: Int = 0
+            c = a
             print(c)
         }
     }
@@ -526,16 +529,95 @@ class Main2Activity : AppCompatActivity() {
     class ClassG constructor(a: Int, b: Int, c: Int = 0) {
         init {
             print("1")
-            var count1:Int
-            count1=a+b+c
-            gff(a,b,c)
+            var count1: Int
+            count1 = a + b + c
+            gff(a, b, c)
         }
-        fun  gff(a: Int, b: Int, c: Int = 0){
+
+        fun gff(a: Int, b: Int, c: Int = 0) {
 //            var count1:Int
 //            count1=a+b+c
         }
     }
+
+    //--------------------累的属性定义与静态方法与属性-------------------------------------------
+    class ClassAA constructor(a: Int, b: Int) {
+        var a: Int = 0
+        var b: Int = 0
+
+        init {
+            this.a = a
+            this.b = b
+        }
+
+        fun fangwen() {
+            var c = a + b
+            print(c)
+        }
+    }
+
+    //上面的类似java的写法太繁琐，kotlin可以更简单,只能在类中这么写
+    class ClassBB constructor(var a: Int, var b: Int) {
+        fun fangwen() {
+            var c = a + b
+            print(c)
+        }
+    }
+
+    class ClassCC constructor(var a: Int, var b: Int) {
+        var sexNmae: String? = ""
+
+        fun fangwen(): String {
+            val c = a + b
+            print(c)
+            return if (b == 0) "男的" else "女的"
+        }
+    }
+
+    fun aady() {
+        //调用方式 赋值
+        var aa = ClassAA(1, 0)
+        var bb = ClassBB(1, 0)
+        var cc = ClassCC(1, 0)
+        print(cc.fangwen())//男的
+    }
+
+    /**
+     * //静态方法 静态属性
+     */
+    class ClassDD constructor(var a: Int, var b: Int) {
+        var sexNmae: String = ""
+
+        fun fangwen(): String {
+            val c = a + b
+            print(c)
+            sexNmae = if (b == 0) "男的" else "女的"
+            return sexNmae
+        }
+
+        //静态成员访问部分
+        companion object {
+            //静态属性
+            var MAN: Int = 0
+            var WUMAN: Int = 1
+            fun fangwen(sexname: String): Int {
+                return when (sexname) {
+                    "男的", "公的" -> MAN
+                    "女的", "母的" -> WUMAN
+                    else -> -1
+                }
+            }
+        }
+
+        //调用
+        fun diaoyongdd() {
+            var sex = ClassDD.fangwen("公的")
+            print(sex)
+            ClassCC(ClassDD.MAN, ClassDD.WUMAN)
+        }
+    }
 }
+
 
 
 
