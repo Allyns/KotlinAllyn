@@ -3,7 +3,10 @@ package com.allyn.demos.kotlinallyndemo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-
+/**
+ * Created by Allyn on 2019/01/09 0009.
+url:https://github.com/Allyns
+ */
 class Main2Activity : AppCompatActivity() {
 
     var is_add: Boolean = true
@@ -616,6 +619,40 @@ class Main2Activity : AppCompatActivity() {
             ClassCC(ClassDD.MAN, ClassDD.WUMAN)
         }
     }
+
+    //------------------------类的继承接口的继承知识点-----------------------------------------------
+    //https://www.cnblogs.com/aqi00/p/7380070.html
+    /**
+     * public : 对所有人开放。Kotlin的类、函数、变量不加开放性修饰符的话，默认就是public类型。
+    internal : 只对本模块内部开放，这是Kotlin新增的关键字。对于App开发来说，本模块便是指App自身。
+    protected : 只对自己和子类开放。
+    private : 只对自己开放，即私有。
+     */
+    /**
+     * open不控制某个对象的访问权限，只决定该对象能否繁衍开来，open表示是否能被继承
+     */
+    /**
+     * open与private不能同时写
+     */
+    /**
+     * 关键字：abstract 抽象方法没有具体的函数体，故而外部无法直接声明抽象类的实例；只有在子类继承之时重写抽象方法，该子类方可正常声明对象实例
+     */
+    /**
+     * 接口：接口不能定义构造函数，否则编译器会报错“An interface may not have a constructor”；
+     * 接口的内部方法通常要被实现它的类进行重写，所以这些方法默认为抽象类型；
+     * 与Java不同的是，Kotlin允许在接口内部实现某个方法，而Java接口的所有内部方法都必须是抽象方法；
+     * Java的extends和implement这两个关键字在Kotlin中都被冒号取代了
+     */
+    /**
+     *  //Kotlin的接口允许声明抽象属性，实现该接口的类必须重载该属性，
+    //与接口内部方法一样，抽象属性前面的open和abstract也可省略掉
+    //open abstract var skilledSports:String
+     */
+    /**
+     * //Kotlin的接口与Java的区别在于，Kotlin接口内部允许实现方法，
+    //此时该方法不是抽象方法，就不能加上abstract，
+    //不过该方法依然是open类型，接口内部的所有方法都默认是open类型
+     */
 }
 
 
