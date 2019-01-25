@@ -621,6 +621,7 @@ class Main2Activity : AppCompatActivity() {
     }
 
     //------------------------类的继承接口的继承知识点-----------------------------------------------
+    //示例看ClassBig.kt类
     //https://www.cnblogs.com/aqi00/p/7380070.html
     /**
      * public : 对所有人开放。Kotlin的类、函数、变量不加开放性修饰符的话，默认就是public类型。
@@ -658,17 +659,111 @@ class Main2Activity : AppCompatActivity() {
 
 
     //------------------------------------特殊类-----------------------------------------------------------------------------
+    //https://www.cnblogs.com/aqi00/p/7410118.html
+    fun diaoyongTSL(){
+        var a=qiantaoA.qiantaoB(1)
+        var b=qiantaoC(1).qiantaoD(2)
+       var str= when(0){
+            meijuA.CUNTIAN.ordinal ->meijuB.CHUNTIAN.jijiename
+           meijuA.XIATIAN.ordinal -> meijuB.XIATIAN.jijiename
+           else -> meijuB.CHUNTIAN.jijiename
+       }
+        print(str)
+    }
     /**
      嵌套类
      */
+    class qiantaoA{
+        class qiantaoB(var count:Int){
+            fun fangfaa(){
+                print(count)
+            }
+        }
+    }
     /**
+     *
      * 内部类
      */
+    class qiantaoC constructor(var count:Int){
+        inner class qiantaoD constructor(var count:Int){
+           fun fangfaA(){
+                print(count)
+            }
+        }
+    }
     /**
-     *
+     *枚举类
      *
      */
+   enum class meijuA{
+        XIATIAN,CUNTIAN,QIUTIAN,DONGTIAN
+    }
 
+  enum class meijuB(var jijiename:String){
+      //定义枚举的名称
+      CHUNTIAN("春天"),XIATIAN("夏天"),QIUTIAN("秋天"),DONGTIAN("冬天")
+  }
+
+    /**
+     * 密封类
+     */
+
+    fun diaoyongmifeng(){
+        var str =when(0){
+           0-> mifengA.chuntian("春天")
+           1-> mifengA.dongtian("冬天")
+           2-> mifengA.qiutian("秋天")
+            else -> mifengA.xiatian("夏天")
+        }
+        //密封类是一种严格的枚举类，它的值是一个有限的集合。
+        //密封类确保条件分支覆盖了所有的枚举类型，因此不再需要else分支。
+        when(str){
+            is mifengA.chuntian -> str.name
+            is mifengA.xiatian -> str.name
+            is mifengA.dongtian -> str.name
+            is mifengA.qiutian -> str.name
+        }
+    }
+    sealed class mifengA{
+        class xiatian(var name:String):mifengA()
+        class chuntian(var name:String):mifengA()
+        class dongtian(var name:String):mifengA()
+        class qiutian(var name:String):mifengA()
+    }
+    /**
+     * 数据类
+     * 1、自动声明与构造入参同名的属性字段；
+    2、自动实现每个属性字段的get/set方法；
+    3、自动提供equals方法，用于比较两个数据对象是否相等；
+    4、自动提供copy方法，允许完整复制某个数据对象，也可在复制后单独修改某几个字段的值；
+    5、自动提供toString方法，用于打印数据对象中保存的所有字段值；
+     */
+    fun diaoyongsjl(){
+        var sj=shuju(0,"a")
+        sj.count=1
+        var c=sj.count
+    }
+    data class shuju(var count:Int,var str:String)
+    /**
+     * 模板类
+     */
+    fun diaoyongmb(){
+       var leixa= moban(0,1)
+        var leixb=moban(1,"一千")
+        print(leixa)
+        print(leixb)
+    }
+    //外部调用模板类构造函数的时候，要在类名后面补充“<参数类型>”，从而动态指定实际的参数类型。不过正如声明变量那样，如果编译器能够根据初始值判断该变量的类型，就无需显式指定该变量的类型；模板类也存在类似的偷懒写法，如果编译器根据输入参数就能知晓参数类型，则调用模板类的构造函数也不必显式指定参数类型。
+    class moban<T> (var count:Int,var len:T){
+        fun getinfo():String{
+            var danwei= when(len){
+                is String -> "公里"
+                is Number-> "km"
+                else -> "未知"
+            }
+            return "$count${danwei.toString()}"
+        }
+    }
 }
 
 
